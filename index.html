@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fontline - Servicios de Fontanería Profesional</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="assets/logo.svg" alt="Fontline Logo">
+                <span>Fontline</span>
+            </div>
+            <nav class="nav" id="mainNav">
+                <ul>
+                    <li><a href="#" onclick="showView('dashboard')">Dashboard</a></li>
+                    <li><a href="#" onclick="showView('services')">Servicios</a></li>
+                    <li><a href="#" onclick="showView('products')">Productos</a></li>
+                    <li><a href="#" onclick="showView('profile')">Perfil</a></li>
+                    <li><a href="#" onclick="logout()">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+            <div class="user-info" id="userInfo">
+                <span id="userName"></span>
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Views -->
+    <div id="authContainer" class="auth-container">
+        <!-- Login Form -->
+        <div id="loginView" class="auth-form active">
+            <div class="form-container">
+                <div class="form-header">
+                    <img src="assets/logo.svg" alt="Fontline Logo" class="auth-logo">
+                    <h1>Fontline</h1>
+                    <p>Servicios de Fontanería Profesional</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Contraseña</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                </form>
+                <p class="auth-switch">
+                    ¿No tienes cuenta? <a href="#" onclick="showAuthView('register')">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerView" class="auth-form">
+            <div class="form-container">
+                <div class="form-header">
+                    <img src="assets/logo.svg" alt="Fontline Logo" class="auth-logo">
+                    <h1>Registro</h1>
+                    <p>Únete a Fontline</p>
+                </div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Nombre Completo</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPhone">Teléfono</label>
+                        <input type="tel" id="registerPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerAddress">Dirección</label>
+                        <input type="text" id="registerAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Contraseña</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerUserType">Tipo de Usuario</label>
+                        <select id="registerUserType" required>
+                            <option value="customer">Cliente</option>
+                            <option value="plumber">Fontanero</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrarse</button>
+                </form>
+                <p class="auth-switch">
+                    ¿Ya tienes cuenta? <a href="#" onclick="showAuthView('login')">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="appContainer" class="app-container" style="display: none;">
+        <!-- Dashboard View -->
+        <div id="dashboardView" class="view active">
+            <div class="container">
+                <h1>Dashboard</h1>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Servicios Activos</h3>
+                            <p class="card-number" id="activeServices">0</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Pedidos Pendientes</h3>
+                            <p class="card-number" id="pendingOrders">0</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Fontaneros Disponibles</h3>
+                            <p class="card-number" id="availablePlumbers">0</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <div class="card-icon">
+                            <i class="fas fa-euro-sign"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Ingresos del Mes</h3>
+                            <p class="card-number">€2,450</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="section">
+                    <h2>Actividades Recientes</h2>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Servicio</th>
+                                    <th>Estado</th>
+                                    <th>Fontanero</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentActivities">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services View -->
+        <div id="servicesView" class="view">
+            <div class="container">
+                <div class="view-header">
+                    <h1>Gestión de Servicios</h1>
+                    <button class="btn btn-primary" onclick="showServiceModal()">
+                        <i class="fas fa-plus"></i> Nuevo Servicio
+                    </button>
+                </div>
+
+                <!-- Service Filters -->
+                <div class="filters">
+                    <select id="serviceTypeFilter" onchange="filterServices()">
+                        <option value="">Todos los Servicios</option>
+                        <option value="installation">Instalación</option>
+                        <option value="repair">Reparación</option>
+                        <option value="maintenance">Mantenimiento</option>
+                    </select>
+                    <select id="serviceStatusFilter" onchange="filterServices()">
+                        <option value="">Todos los Estados</option>
+                        <option value="pending">Pendiente</option>
+                        <option value="approved">Aprobado</option>
+                        <option value="in_progress">En Progreso</option>
+                        <option value="completed">Completado</option>
+                        <option value="cancelled">Cancelado</option>
+                    </select>
+                </div>
+
+                <!-- Services Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Fontanero</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="servicesTable">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products View -->
+        <div id="productsView" class="view">
+            <div class="container">
+                <div class="view-header">
+                    <h1>Catálogo de Productos</h1>
+                    <button class="btn btn-primary" onclick="showProductModal()">
+                        <i class="fas fa-plus"></i> Nuevo Producto
+                    </button>
+                </div>
+
+                <!-- Product Grid -->
+                <div class="products-grid" id="productsGrid">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div id="profileView" class="view">
+            <div class="container">
+                <h1>Mi Perfil</h1>
+                <div class="profile-container">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="profileName">Nombre Completo</label>
+                            <input type="text" id="profileName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">Email</label>
+                            <input type="email" id="profileEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePhone">Teléfono</label>
+                            <input type="tel" id="profilePhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileAddress">Dirección</label>
+                            <input type="text" id="profileAddress" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Management View (Admin only) -->
+        <div id="customersView" class="view">
+            <div class="container">
+                <div class="view-header">
+                    <h1>Gestión de Clientes</h1>
+                    <button class="btn btn-primary" onclick="showCustomerModal()">
+                        <i class="fas fa-plus"></i> Nuevo Cliente
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Servicios</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTable">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Plumber Management View (Admin only) -->
+        <div id="plumbersView" class="view">
+            <div class="container">
+                <div class="view-header">
+                    <h1>Gestión de Fontaneros</h1>
+                    <button class="btn btn-primary" onclick="showPlumberModal()">
+                        <i class="fas fa-plus"></i> Nuevo Fontanero
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Especialidad</th>
+                                <th>Estado</th>
+                                <th>Tareas Asignadas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plumbersTable">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Service Modal -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="serviceModalTitle">Nuevo Servicio</h2>
+                <span class="close" onclick="closeModal('serviceModal')">&times;</span>
+            </div>
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <div class="form-group">
+                    <label for="serviceCustomer">Cliente</label>
+                    <select id="serviceCustomer" required>
+                        <option value="">Seleccionar Cliente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceType">Tipo de Servicio</label>
+                    <select id="serviceType" required>
+                        <option value="installation">Instalación</option>
+                        <option value="repair">Reparación</option>
+                        <option value="maintenance">Mantenimiento</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDescription">Descripción</label>
+                    <textarea id="serviceDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="servicePlumber">Fontanero Asignado</label>
+                    <select id="servicePlumber">
+                        <option value="">Sin Asignar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDate">Fecha Programada</label>
+                    <input type="datetime-local" id="serviceDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceProducts">Productos Incluidos</label>
+                    <select id="serviceProducts" multiple>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('serviceModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="productModalTitle">Nuevo Producto</h2>
+                <span class="close" onclick="closeModal('productModal')">&times;</span>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="form-group">
+                    <label for="productName">Nombre del Producto</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Categoría</label>
+                    <select id="productCategory" required>
+                        <option value="pipes">Tuberías</option>
+                        <option value="faucets">Grifos</option>
+                        <option value="toilets">Sanitarios</option>
+                        <option value="tools">Herramientas</option>
+                        <option value="accessories">Accesorios</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Precio (€)</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productStock">Stock</label>
+                    <input type="number" id="productStock" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Descripción</label>
+                    <textarea id="productDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productInstallation">
+                        Incluye instalación
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('productModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Realizar Pedido</h2>
+                <span class="close" onclick="closeModal('orderModal')">&times;</span>
+            </div>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="orderProduct">Producto</label>
+                    <select id="orderProduct" required>
+                        <option value="">Seleccionar Producto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="orderQuantity">Cantidad</label>
+                    <input type="number" id="orderQuantity" min="1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="orderInstallation">
+                        Solicitar instalación
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="orderNotes">Notas Adicionales</label>
+                    <textarea id="orderNotes"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('orderModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Realizar Pedido</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications"></div>
+
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
