@@ -12,6 +12,12 @@
     --warning: 38 92% 50%; /* #ED8936 - Orange */
     --error: 0 84% 60%; /* #E53E3E - Red */
     --shadow: 220 43% 11%; /* #1A202C - Shadow color */
+    
+    /* Animation variables */
+    --transition-fast: 0.15s ease-out;
+    --transition-normal: 0.3s ease-out;
+    --transition-slow: 0.5s ease-out;
+    --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 /* Reset and Base Styles */
@@ -23,9 +29,11 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: hsl(var(--background));
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--secondary-color)));
+    background-attachment: fixed;
     color: hsl(var(--text-primary));
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 .container {
@@ -36,11 +44,18 @@ body {
 
 /* Header Styles */
 .header {
-    background-color: hsl(var(--surface));
-    box-shadow: 0 2px 4px hsla(var(--shadow), 0.1);
+    background: linear-gradient(135deg, hsl(var(--surface)), hsl(var(--secondary-color) / 0.8));
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px hsla(var(--shadow), 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+    transition: all var(--transition-normal);
+}
+
+.header:hover {
+    box-shadow: 0 12px 40px hsla(var(--shadow), 0.15);
 }
 
 .header .container {
@@ -57,11 +72,25 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     color: hsl(var(--primary-color));
+    transition: all var(--transition-normal);
+    cursor: pointer;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    color: hsl(var(--accent-color));
 }
 
 .logo img {
     width: 40px;
     height: 40px;
+    transition: all var(--transition-normal);
+    filter: drop-shadow(0 2px 8px hsla(var(--primary-color), 0.3));
+}
+
+.logo:hover img {
+    transform: rotate(360deg);
+    filter: drop-shadow(0 4px 12px hsla(var(--accent-color), 0.4));
 }
 
 .nav ul {
@@ -74,11 +103,33 @@ body {
     text-decoration: none;
     color: hsl(var(--text-primary));
     font-weight: 500;
-    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    position: relative;
+    transition: all var(--transition-normal);
+    overflow: hidden;
+}
+
+.nav a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary-color) / 0.1), transparent);
+    transition: left var(--transition-slow);
 }
 
 .nav a:hover {
     color: hsl(var(--primary-color));
+    background: hsl(var(--primary-color) / 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px hsla(var(--primary-color), 0.2);
+}
+
+.nav a:hover::before {
+    left: 100%;
 }
 
 .user-info {
@@ -86,11 +137,29 @@ body {
     align-items: center;
     gap: 0.5rem;
     color: hsl(var(--text-secondary));
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background: hsl(var(--surface) / 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--border) / 0.5);
+    transition: all var(--transition-normal);
+}
+
+.user-info:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 24px hsla(var(--shadow), 0.1);
+    background: hsl(var(--surface));
 }
 
 .user-info i {
     font-size: 1.5rem;
     color: hsl(var(--primary-color));
+    transition: all var(--transition-normal);
+}
+
+.user-info:hover i {
+    color: hsl(var(--accent-color));
+    transform: scale(1.1);
 }
 
 /* Auth Container */
@@ -100,6 +169,30 @@ body {
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, hsl(var(--primary-color)), hsl(var(--accent-color)));
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        hsl(var(--surface) / 0.1) 2px,
+        hsl(var(--surface) / 0.1) 4px
+    );
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
 }
 
 .auth-form {
@@ -107,17 +200,43 @@ body {
     width: 100%;
     max-width: 400px;
     padding: 2rem;
+    position: relative;
+    z-index: 10;
 }
 
 .auth-form.active {
     display: block;
+    animation: slideInUp 0.6s var(--bounce);
 }
 
 .form-container {
-    background: hsl(var(--surface));
+    background: hsl(var(--surface) / 0.95);
+    backdrop-filter: blur(20px);
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px hsla(var(--shadow), 0.1);
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 40px hsla(var(--shadow), 0.2),
+        0 0 0 1px hsl(var(--surface) / 0.1);
+    border: 1px solid hsl(var(--border) / 0.2);
+    transition: all var(--transition-normal);
+}
+
+.form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 30px 60px hsla(var(--shadow), 0.25),
+        0 0 0 1px hsl(var(--surface) / 0.2);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .form-header {
@@ -129,6 +248,13 @@ body {
     width: 60px;
     height: 60px;
     margin-bottom: 1rem;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px hsla(var(--primary-color), 0.3));
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .form-header h1 {
@@ -156,11 +282,14 @@ body {
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     border: 2px solid hsl(var(--border));
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    background: hsl(var(--surface) / 0.8);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-normal);
+    position: relative;
 }
 
 .form-group input:focus,
@@ -168,6 +297,18 @@ body {
 .form-group textarea:focus {
     outline: none;
     border-color: hsl(var(--primary-color));
+    background: hsl(var(--surface));
+    box-shadow: 
+        0 0 0 4px hsl(var(--primary-color) / 0.1),
+        0 8px 24px hsla(var(--primary-color), 0.15);
+    transform: translateY(-2px);
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: hsl(var(--primary-color) / 0.7);
+    transform: translateY(-1px);
 }
 
 .form-group textarea {
