@@ -174,18 +174,29 @@ class FontlineApp {
                     <td>
                         <div class="action-buttons">
                             <button class="btn btn-small btn-primary" onclick="app.editService(${service.id})">
-                                <i class="fas fa-edit"></i>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>
+                                </svg>
                             </button>
                             ${service.status === 'pending' ? `
                                 <button class="btn btn-small btn-success" onclick="app.approveService(${service.id})">
-                                    <i class="fas fa-check"></i>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20,6 9,17 4,12"/>
+                                    </svg>
                                 </button>
                                 <button class="btn btn-small btn-error" onclick="app.rejectService(${service.id})">
-                                    <i class="fas fa-times"></i>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"/>
+                                        <line x1="6" y1="6" x2="18" y2="18"/>
+                                    </svg>
                                 </button>
                             ` : ''}
                             <button class="btn btn-small btn-error" onclick="app.deleteService(${service.id})">
-                                <i class="fas fa-trash"></i>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                </svg>
                             </button>
                         </div>
                     </td>
@@ -216,15 +227,28 @@ class FontlineApp {
                 <div class="product-actions">
                     ${this.currentUser.userType === 'customer' ? `
                         <button class="btn btn-primary" onclick="app.orderProduct(${product.id})">
-                            <i class="fas fa-shopping-cart"></i> Pedir
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                            Pedir
                         </button>
                     ` : ''}
                     ${this.currentUser.userType === 'admin' ? `
                         <button class="btn btn-secondary" onclick="app.editProduct(${product.id})">
-                            <i class="fas fa-edit"></i> Editar
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>
+                            </svg>
+                            Editar
                         </button>
                         <button class="btn btn-error" onclick="app.deleteProduct(${product.id})">
-                            <i class="fas fa-trash"></i> Eliminar
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3,6 5,6 21,6"/>
+                                <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                            </svg>
+                            Eliminar
                         </button>
                     ` : ''}
                 </div>
@@ -260,10 +284,16 @@ class FontlineApp {
                     <td>
                         <div class="action-buttons">
                             <button class="btn btn-small btn-primary" onclick="app.editCustomer(${customer.id})">
-                                <i class="fas fa-edit"></i>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>
+                                </svg>
                             </button>
                             <button class="btn btn-small btn-error" onclick="app.deleteCustomer(${customer.id})">
-                                <i class="fas fa-trash"></i>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3,6 5,6 21,6"/>
+                                    <path d="M19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                                </svg>
                             </button>
                         </div>
                     </td>
